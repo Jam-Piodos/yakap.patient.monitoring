@@ -1,772 +1,246 @@
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <base target="_top">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <title>Patient Management Dashboard</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CUMC | YAKAP Dashboard</title>
 
   <style>
-    :root {
-      --primary: #19365b;
-      --primary-light: #edf3fa;
-      --bg: #f5f7fb;
-      --text: #202b3c;
-      --muted: #78869a;
-      --border: #e7ebf1;
-      --green: #16865c;
-      --red: #d94848;
-      --white: #ffffff;
-    }
-
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Inter', sans-serif;
+      font-family: Arial, sans-serif;
+      background: #f3f6fb;
+      color: #17233b;
+    }
+
+    header {
+      background: #102b50;
+      color: white;
+      padding: 24px 5%;
+    }
+
+    header h1 {
+      font-size: 24px;
+      margin-bottom: 6px;
+    }
+
+    header p {
+      color: #c5d4e8;
       font-size: 14px;
     }
 
-    button, input, select {
-      font: inherit;
-    }
-
-    button {
-      cursor: pointer;
-    }
-
-    .layout {
-      min-height: 100vh;
-    }
-
-    /* HEADER */
-
-    .header {
-      background: var(--primary);
-      color: white;
-      padding: 20px 4%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 20px;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 13px;
-    }
-
-    .brand-icon {
-      width: 43px;
-      height: 43px;
-      border-radius: 12px;
-      background: rgba(255,255,255,.13);
-      display: grid;
-      place-items: center;
-      font-size: 23px;
-    }
-
-    .brand h2 {
-      font-size: 17px;
-      margin: 0;
-      letter-spacing: -.4px;
-    }
-
-    .brand p {
-      margin: 5px 0 0;
-      font-size: 11px;
-      color: #c5d2e2;
-    }
-
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .live-label {
-      font-size: 11px;
-      background: rgba(22, 134, 92, .25);
-      border: 1px solid rgba(95, 220, 163, .4);
-      color: #b8f1d5;
-      padding: 7px 12px;
-      border-radius: 20px;
-    }
-
-    /* MAIN */
-
-    .main {
-      width: 92%;
-      max-width: 1500px;
+    main {
+      max-width: 1200px;
       margin: 30px auto;
+      padding: 0 20px;
     }
 
-    .page-heading {
+    .topline {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 24px;
-      gap: 15px;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 22px;
     }
 
-    .page-heading h1 {
-      font-size: 25px;
-      margin: 0;
-      letter-spacing: -.8px;
+    .topline h2 {
+      font-size: 21px;
     }
 
-    .page-heading p {
-      margin: 7px 0 0;
-      color: var(--muted);
+    .updated {
       font-size: 12px;
+      color: #718096;
     }
-
-    .btn {
-      background: var(--primary);
-      color: white;
-      border: 0;
-      border-radius: 9px;
-      padding: 11px 16px;
-      font-size: 12px;
-      font-weight: 600;
-      transition: .2s;
-    }
-
-    .btn:hover {
-      opacity: .9;
-      transform: translateY(-1px);
-    }
-
-    .btn:disabled {
-      opacity: .6;
-      cursor: wait;
-    }
-
-    /* STATISTICS */
 
     .stats {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 15px;
-      margin-bottom: 25px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 22px;
     }
 
-    .stat-card {
+    .card, .panel {
       background: white;
-      border: 1px solid var(--border);
-      border-radius: 13px;
-      padding: 19px;
-      min-width: 0;
+      border: 1px solid #e5eaf1;
+      border-radius: 12px;
+      padding: 22px;
+      box-shadow: 0 3px 12px rgba(20, 40, 70, 0.04);
     }
 
     .stat-label {
-      color: var(--muted);
-      font-size: 11px;
-      font-weight: 500;
+      color: #718096;
+      font-size: 13px;
+      margin-bottom: 12px;
     }
 
-    .stat-number {
-      font-size: 25px;
-      font-weight: 800;
-      margin-top: 12px;
-      letter-spacing: -.8px;
+    .stat-value {
+      font-size: 29px;
+      font-weight: 700;
+      color: #102b50;
       overflow-wrap: anywhere;
     }
 
-    .stat-sub {
-      font-size: 10px;
-      color: var(--muted);
-      margin-top: 5px;
+    .stat-note {
+      color: #8995a7;
+      font-size: 12px;
+      margin-top: 7px;
     }
 
-    /* RECORD SECTION */
-
-    .section {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 15px;
-      padding: 22px;
-    }
-
-    .section-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 15px;
-      margin-bottom: 19px;
-    }
-
-    .section-top h2 {
-      font-size: 16px;
-      margin: 0;
-    }
-
-    .record-count {
-      color: var(--muted);
-      font-size: 11px;
-      margin-top: 5px;
-    }
-
-    /* FILTERS */
-
-    .filters {
+    .content-grid {
       display: grid;
-      grid-template-columns: minmax(200px, 2fr) 1fr 1fr;
-      gap: 10px;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .panel h3 {
+      font-size: 17px;
       margin-bottom: 20px;
     }
 
-    .control {
-      width: 100%;
-      height: 42px;
-      padding: 0 13px;
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 9px;
-      color: var(--text);
-      outline: none;
-      font-size: 12px;
-    }
-
-    .control:focus {
-      border-color: #7696bb;
-      box-shadow: 0 0 0 3px #19365b12;
-    }
-
-    /* PATIENT CARDS */
-
-    .patient-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 15px;
-    }
-
-    .patient-card {
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 17px;
-      transition: .2s;
-      background: white;
-      min-width: 0;
-    }
-
-    .patient-card:hover {
-      border-color: #9bb1cc;
-      box-shadow: 0 5px 20px rgba(28, 49, 78, .07);
-      transform: translateY(-2px);
-    }
-
-    .patient-top {
-      display: flex;
-      justify-content: space-between;
-      gap: 8px;
-      align-items: flex-start;
-    }
-
-    .patient-name {
-      font-size: 13px;
-      font-weight: 700;
-      line-height: 1.5;
-      overflow-wrap: anywhere;
-    }
-
-    .patient-no {
-      font-size: 11px;
-      color: var(--muted);
-      margin-top: 5px;
-    }
-
-    .status {
-      font-size: 10px;
-      font-weight: 600;
-      border-radius: 20px;
-      padding: 6px 9px;
-      white-space: nowrap;
-    }
-
-    .status.new {
-      color: #2563a7;
-      background: #eaf3ff;
-    }
-
-    .status.returning {
-      color: #16865c;
-      background: #e5f6ed;
-    }
-
-    .patient-info {
+    .split-stats {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 13px;
-      padding: 16px 0;
-      margin-top: 12px;
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
+      gap: 12px;
     }
 
-    .info-label {
-      font-size: 10px;
-      color: var(--muted);
-      margin-bottom: 5px;
-    }
-
-    .info-value {
-      font-size: 12px;
-      font-weight: 600;
-      overflow-wrap: anywhere;
-    }
-
-    .patient-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 15px;
-      gap: 8px;
-    }
-
-    .visit-info {
-      color: var(--muted);
-      font-size: 10px;
-    }
-
-    .charge {
-      color: var(--green);
-      font-size: 14px;
-      font-weight: 800;
-    }
-
-    .view-btn {
-      display: block;
-      width: 100%;
-      background: var(--primary-light);
-      color: var(--primary);
-      border: 0;
-      border-radius: 8px;
-      padding: 10px;
-      margin-top: 15px;
-      font-size: 11px;
-      font-weight: 700;
-    }
-
-    .view-btn:hover {
-      background: #dce8f6;
-    }
-
-    /* PAGINATION */
-
-    .pagination {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      margin-top: 23px;
-      padding-top: 17px;
-      border-top: 1px solid var(--border);
-    }
-
-    .pagination-info {
-      font-size: 11px;
-      color: var(--muted);
-    }
-
-    .page-buttons {
-      display: flex;
-      gap: 6px;
-    }
-
-    .page-btn {
-      border: 1px solid var(--border);
-      background: white;
-      padding: 8px 12px;
-      border-radius: 7px;
-      font-size: 11px;
-      color: var(--text);
-    }
-
-    .page-btn:disabled {
-      opacity: .4;
-      cursor: not-allowed;
-    }
-
-    /* MODAL */
-
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(12, 26, 45, .62);
-      z-index: 1000;
-      display: none;
-      align-items: center;
-      justify-content: center;
+    .mini {
+      background: #f5f8fc;
       padding: 18px;
-      backdrop-filter: blur(3px);
+      border-radius: 9px;
     }
 
-    .modal-overlay.show {
-      display: flex;
+    .mini span {
+      display: block;
+      font-size: 12px;
+      color: #718096;
+      margin-bottom: 9px;
     }
 
-    .modal {
-      width: 100%;
-      max-width: 850px;
-      max-height: 92vh;
-      background: #f7f9fc;
-      border-radius: 16px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 0 20px 70px rgba(0,0,0,.2);
+    .mini strong {
+      font-size: 25px;
+      color: #102b50;
     }
 
-    .modal-header {
-      background: var(--primary);
-      color: white;
-      padding: 23px 25px;
-      position: relative;
+    .bar-row {
+      margin-bottom: 19px;
     }
 
-    .modal-header-top {
+    .bar-info {
       display: flex;
       justify-content: space-between;
+      gap: 12px;
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .bar-track {
+      height: 10px;
+      background: #edf1f6;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      width: 0;
+      background: #2878c7;
+      border-radius: 20px;
+      transition: width 0.4s ease;
+    }
+
+    .service-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .service-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 13px 0;
+      border-bottom: 1px solid #edf1f6;
+      font-size: 14px;
+    }
+
+    .service-item:last-child {
+      border-bottom: none;
+    }
+
+    .service-item strong {
+      color: #102b50;
+    }
+
+    .toolbar {
+      display: flex;
       align-items: center;
       gap: 12px;
     }
 
-    .modal-title {
-      font-size: 18px;
-      font-weight: 800;
-      line-height: 1.5;
-      margin: 10px 0 5px;
-      padding-right: 25px;
-      overflow-wrap: anywhere;
-    }
-
-    .modal-subtitle {
-      font-size: 11px;
-      color: #d1ddeb;
-    }
-
-    .close-btn {
-      border: 0;
-      background: rgba(255,255,255,.15);
+    button {
+      background: #1c65a8;
       color: white;
-      width: 34px;
-      height: 34px;
-      border-radius: 8px;
-      font-size: 20px;
-      flex-shrink: 0;
+      border: none;
+      border-radius: 7px;
+      padding: 10px 16px;
+      cursor: pointer;
+      font-size: 13px;
     }
 
-    .modal-body {
-      overflow-y: auto;
-      padding: 23px;
+    button:hover {
+      background: #164f85;
     }
 
-    .profile-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-bottom: 20px;
+    button:disabled {
+      opacity: 0.6;
+      cursor: wait;
     }
 
-    .profile-box {
+    .message {
       background: white;
-      border: 1px solid var(--border);
+      border: 1px solid #e5eaf1;
       border-radius: 10px;
-      padding: 14px;
-      min-width: 0;
-    }
-
-    .profile-box .label {
-      color: var(--muted);
-      font-size: 10px;
-    }
-
-    .profile-box .value {
-      font-size: 17px;
-      font-weight: 800;
-      margin-top: 8px;
-      overflow-wrap: anywhere;
-    }
-
-    .profile-details {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 15px;
-      margin-bottom: 23px;
-    }
-
-    .modal-section-title {
+      padding: 18px;
+      margin-bottom: 18px;
+      color: #64748b;
       font-size: 14px;
-      font-weight: 800;
-      margin: 0 0 14px;
-    }
-
-    /* SERVICE TOTALS */
-
-    .service-summary {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 9px;
-      margin-bottom: 25px;
-    }
-
-    .service-box {
-      background: white;
-      border: 1px solid var(--border);
-      padding: 12px;
-      border-radius: 9px;
-      min-width: 0;
-    }
-
-    .service-box .label {
-      font-size: 10px;
-      color: var(--muted);
-    }
-
-    .service-box .value {
-      margin-top: 8px;
-      font-size: 13px;
-      font-weight: 800;
-      overflow-wrap: anywhere;
-    }
-
-    /* VISIT HISTORY */
-
-    .visit-list {
-      display: flex;
-      flex-direction: column;
-      gap: 13px;
-    }
-
-    .visit-card {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      overflow: hidden;
-    }
-
-    .visit-header {
-      padding: 15px 17px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      background: #fdfefe;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .visit-number {
-      font-weight: 800;
-      font-size: 13px;
-    }
-
-    .visit-date {
-      font-size: 10px;
-      color: var(--muted);
-      margin-top: 5px;
-    }
-
-    .visit-content {
-      padding: 16px 17px;
-    }
-
-    .visit-meta {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 13px;
-      margin-bottom: 15px;
-    }
-
-    .diagnosis {
-      background: #f5f7fa;
-      border-radius: 8px;
-      padding: 11px;
-      margin-bottom: 15px;
-    }
-
-    .diagnosis-label {
-      font-size: 10px;
-      color: var(--muted);
-      margin-bottom: 5px;
-    }
-
-    .diagnosis-value {
-      font-size: 12px;
-      font-weight: 600;
-      line-height: 1.6;
-    }
-
-    .service-table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    .service-table td {
-      padding: 10px 4px;
-      border-bottom: 1px solid #eef0f4;
-      font-size: 11px;
-    }
-
-    .service-table td:last-child {
-      text-align: right;
-      font-weight: 600;
-    }
-
-    .visit-total {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-top: 14px;
-      font-weight: 800;
-      font-size: 12px;
-    }
-
-    .visit-total .amount {
-      color: var(--green);
-      font-size: 17px;
-    }
-
-    /* STATES */
-
-    .empty {
-      text-align: center;
-      padding: 55px 20px;
-      color: var(--muted);
-      font-size: 12px;
-      grid-column: 1 / -1;
-    }
-
-    .empty-icon {
-      font-size: 30px;
-      margin-bottom: 10px;
-    }
-
-    .loading {
-      text-align: center;
-      padding: 55px;
-      color: var(--muted);
-      font-size: 12px;
     }
 
     .error {
-      background: #fff0f0;
-      border: 1px solid #f5caca;
-      color: #b42323;
-      padding: 13px;
-      border-radius: 9px;
+      color: #b42318;
+      border-color: #f2b8b5;
+      background: #fff7f6;
+    }
+
+    footer {
+      text-align: center;
+      color: #8995a7;
       font-size: 12px;
-      margin-bottom: 15px;
+      padding: 30px 15px;
     }
 
-    .last-updated {
-      font-size: 10px;
-      color: var(--muted);
-      margin-top: 15px;
-    }
-
-    /* RESPONSIVE */
-
-    @media(max-width: 1050px) {
-      .stats {
-        grid-template-columns: repeat(3, 1fr);
-      }
-
-      .patient-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-    }
-
-    @media(max-width: 650px) {
-      .main {
-        width: 94%;
-        margin: 20px auto;
-      }
-
-      .header {
-        padding: 15px 4%;
-      }
-
-      .brand h2 {
-        font-size: 13px;
-      }
-
-      .header-right .live-label {
-        display: none;
-      }
-
-      .page-heading {
-        align-items: flex-start;
-      }
-
-      .page-heading h1 {
-        font-size: 20px;
-      }
-
+    @media (max-width: 750px) {
       .stats {
         grid-template-columns: repeat(2, 1fr);
-        gap: 9px;
       }
 
-      .stat-card {
-        padding: 14px;
+      .content-grid {
+        grid-template-columns: 1fr;
       }
+    }
 
-      .stat-number {
-        font-size: 21px;
-      }
-
-      .filters {
+    @media (max-width: 450px) {
+      .stats {
         grid-template-columns: 1fr;
       }
 
-      .patient-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .section {
-        padding: 14px;
-      }
-
-      .profile-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .service-summary {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .modal-overlay {
-        padding: 0;
-      }
-
-      .modal {
-        height: 100%;
-        max-height: 100%;
-        border-radius: 0;
-      }
-
-      .modal-body {
-        padding: 15px;
-      }
-
-      .modal-header {
-        padding: 18px;
+      .stat-value {
+        font-size: 25px;
       }
     }
   </style>
@@ -774,904 +248,339 @@
 
 <body>
 
-<div class="layout">
-
-  <!-- HEADER -->
-
-  <header class="header">
-
-    <div class="brand">
-      <div class="brand-icon">✚</div>
-
-      <div>
-        <h2>PATIENT MANAGEMENT</h2>
-        <p>YAKAP Patient Records System</p>
-      </div>
-    </div>
-
-    <div class="header-right">
-      <span class="live-label">● CONNECTED TO GOOGLE SHEETS</span>
-    </div>
-
+  <header>
+    <h1>CUMC YAKAP Dashboard</h1>
+    <p>Public Service Statistics and Performance Overview</p>
   </header>
 
-  <!-- MAIN DASHBOARD -->
+  <main>
 
-  <main class="main">
-
-    <div class="page-heading">
-
+    <div class="topline">
       <div>
-        <h1>Patient Dashboard</h1>
-        <p>Monitor patient records, transactions and service history.</p>
+        <h2>Dashboard Overview</h2>
+        <p class="updated" id="updatedAt">Waiting for data...</p>
       </div>
 
-      <button class="btn" id="refreshBtn" onclick="loadDashboard()">
-        ↻ Refresh Data
-      </button>
-
+      <div class="toolbar">
+        <button id="refreshButton" onclick="loadDashboard()">
+          Refresh Data
+        </button>
+      </div>
     </div>
 
-    <!-- STATISTICS -->
-
-    <div class="stats">
-
-      <div class="stat-card">
-        <div class="stat-label">TOTAL PATIENTS</div>
-        <div class="stat-number" id="totalPatients">0</div>
-        <div class="stat-sub">Unique patient numbers</div>
-      </div>
-
-      <div class="stat-card">
-        <div class="stat-label">TOTAL VISITS</div>
-        <div class="stat-number" id="totalVisits">0</div>
-        <div class="stat-sub">Recorded transactions</div>
-      </div>
-
-      <div class="stat-card">
-        <div class="stat-label">TODAY'S VISITS</div>
-        <div class="stat-number" id="todayVisits">0</div>
-        <div class="stat-sub">Transactions today</div>
-      </div>
-
-      <div class="stat-card">
-        <div class="stat-label">NEW PATIENTS</div>
-        <div class="stat-number" id="newPatients">0</div>
-        <div class="stat-sub">One recorded visit</div>
-      </div>
-
-      <div class="stat-card">
-        <div class="stat-label">RETURNING PATIENTS</div>
-        <div class="stat-number" id="returningPatients">0</div>
-        <div class="stat-sub">Multiple recorded visits</div>
-      </div>
-
+    <div id="message" class="message">
+      Loading dashboard statistics...
     </div>
 
-    <!-- PATIENT RECORDS -->
+    <section class="stats">
 
-    <section class="section">
+      <div class="card">
+        <div class="stat-label">Total Patients</div>
+        <div class="stat-value" id="totalPatients">—</div>
+        <div class="stat-note">Unique patient numbers</div>
+      </div>
 
-      <div class="section-top">
+      <div class="card">
+        <div class="stat-label">Total Visits</div>
+        <div class="stat-value" id="totalVisits">—</div>
+        <div class="stat-note">Recorded transactions</div>
+      </div>
 
-        <div>
-          <h2>Patient Records</h2>
-          <div class="record-count" id="recordCount">
-            Loading records...
+      <div class="card">
+        <div class="stat-label">Total Charges</div>
+        <div class="stat-value" id="totalCharges">—</div>
+        <div class="stat-note">Combined department charges</div>
+      </div>
+
+    </section>
+
+    <section class="content-grid">
+
+      <div class="panel">
+        <h3>Patient Classification</h3>
+
+        <div class="split-stats">
+          <div class="mini">
+            <span>New Patients</span>
+            <strong id="newPatients">—</strong>
+          </div>
+
+          <div class="mini">
+            <span>Returning Patients</span>
+            <strong id="returningPatients">—</strong>
           </div>
         </div>
-
       </div>
 
-      <!-- SEARCH AND FILTERS -->
-
-      <div class="filters">
-
-        <input
-          type="text"
-          id="searchInput"
-          class="control"
-          placeholder="⌕ Search patient name or patient number..."
-          oninput="applyFilters()"
-        >
-
-        <select
-          id="statusFilter"
-          class="control"
-          onchange="applyFilters()"
-        >
-          <option value="All">All Patient Status</option>
-          <option value="New">New Patients</option>
-          <option value="Returning">Returning Patients</option>
-        </select>
-
-        <select
-          id="serviceFilter"
-          class="control"
-          onchange="applyFilters()"
-        >
-          <option value="All">All Service Types</option>
-          <option value="YAKAP">YAKAP</option>
-          <option value="Other">Other Services</option>
-        </select>
-
+      <div class="panel">
+        <h3>Department Charges</h3>
+        <div id="departmentBars"></div>
       </div>
 
-      <div id="errorContainer"></div>
-
-      <div id="patientGrid" class="patient-grid">
-
-        <div class="loading">
-          Loading patient database...
-        </div>
-
+      <div class="panel">
+        <h3>Service Type Summary</h3>
+        <div id="serviceTypes" class="service-list"></div>
       </div>
 
-      <!-- PAGINATION -->
-
-      <div class="pagination">
-
-        <div class="pagination-info" id="paginationInfo">
-          Page 1
-        </div>
-
-        <div class="page-buttons">
-          <button class="page-btn" id="prevBtn"
-            onclick="changePage(-1)">
-            ← Previous
-          </button>
-
-          <button class="page-btn" id="nextBtn"
-            onclick="changePage(1)">
-            Next →
-          </button>
-        </div>
-
+      <div class="panel">
+        <h3>Department Breakdown</h3>
+        <div id="departmentTotals" class="service-list"></div>
       </div>
-
-      <div class="last-updated" id="lastUpdated"></div>
 
     </section>
 
   </main>
 
-</div>
+  <footer>
+    CUMC YAKAP | Public Aggregate Statistics Dashboard
+  </footer>
 
-<!-- PATIENT HISTORY MODAL -->
+  <script>
+    /*
+     * REPLACE THIS WITH YOUR DEPLOYED
+     * GOOGLE APPS SCRIPT WEB APP URL.
+     */
+    const API_URL = "https://script.google.com/macros/s/AKfycbwytHFTKw-o_R7oPlk-iDh1PtyiEzEtSRW5mLYqUgh7LRIeo2fbG0EeavPzWCD-b1LPQA/exec";
 
-<div
-  class="modal-overlay"
-  id="patientModal"
-  onclick="handleModalBackdrop(event)"
->
+    const peso = new Intl.NumberFormat("en-PH", {
+      style: "currency",
+      currency: "PHP",
+      maximumFractionDigits: 2
+    });
 
-  <div class="modal">
+    const numberFormat = new Intl.NumberFormat("en-PH");
 
-    <div class="modal-header">
+    function money(value) {
+      return peso.format(Number(value) || 0);
+    }
 
-      <div class="modal-header-top">
-        <span class="live-label">PATIENT PROFILE</span>
+    function number(value) {
+      return numberFormat.format(Number(value) || 0);
+    }
 
-        <button
-          class="close-btn"
-          onclick="closeModal()"
-          aria-label="Close modal"
-        >×</button>
-      </div>
+    function showMessage(message, isError = false) {
+      const element = document.getElementById("message");
 
-      <div class="modal-title" id="modalPatientName">
-        Patient Name
-      </div>
+      element.textContent = message;
+      element.className = isError
+        ? "message error"
+        : "message";
 
-      <div class="modal-subtitle" id="modalPatientNumber">
-        Patient Number
-      </div>
+      element.style.display = "block";
+    }
 
-    </div>
+    function hideMessage() {
+      document.getElementById("message").style.display = "none";
+    }
 
-    <div class="modal-body" id="modalBody">
+    function loadDashboard() {
+      const button = document.getElementById("refreshButton");
 
-      <div class="loading">
-        Loading patient history...
-      </div>
-
-    </div>
-
-  </div>
-
-</div>
-
-<script>
-
-/****************************************************
- * FRONTEND JAVASCRIPT
- ****************************************************/
-
-let allPatients = [];
-let filteredPatients = [];
-
-let currentPage = 1;
-const pageSize = 9;
-
-let dashboardLoading = false;
-let historyRequest = 0;
-
-
-/**
- * Safe HTML output.
- */
-function escapeHtml(value) {
-  return String(value ?? '').replace(/[&<>"']/g, char => ({
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#39;'
-  })[char]);
-}
-
-
-/**
- * Format currency.
- */
-function money(value) {
-  return new Intl.NumberFormat('en-PH', {
-    style: 'currency',
-    currency: 'PHP'
-  }).format(Number(value) || 0);
-}
-
-
-/**
- * Format numbers.
- */
-function number(value) {
-  return new Intl.NumberFormat('en-PH').format(
-    Number(value) || 0
-  );
-}
-
-
-/**
- * Load main dashboard data.
- */
-function loadDashboard() {
-
-  if (dashboardLoading) return;
-
-  dashboardLoading = true;
-
-  const refreshBtn = document.getElementById('refreshBtn');
-
-  refreshBtn.disabled = true;
-  refreshBtn.textContent = 'Loading...';
-
-  document.getElementById('errorContainer').innerHTML = '';
-
-  google.script.run
-
-    .withSuccessHandler(function(response) {
-
-      dashboardLoading = false;
-
-      refreshBtn.disabled = false;
-      refreshBtn.textContent = '↻ Refresh Data';
-
-      if (!response || !response.success) {
-        showDashboardError('Unable to retrieve patient records.');
+      if (
+        !API_URL ||
+        API_URL.includes("PASTE_YOUR")
+      ) {
+        showMessage(
+          "Please enter your deployed Google Apps Script Web App URL in the API_URL variable.",
+          true
+        );
         return;
       }
 
-      allPatients = response.patients || [];
+      button.disabled = true;
+      button.textContent = "Loading...";
 
-      updateStatistics(response.statistics);
+      showMessage("Loading dashboard statistics...");
 
-      document.getElementById('lastUpdated').textContent =
-        'Last updated: ' + response.lastUpdated;
+      // JSONP allows GitHub Pages to request the public aggregate API.
+      // No patient-level information is requested or returned.
+      const oldScript = document.getElementById("dashboardApiScript");
 
-      applyFilters();
+      if (oldScript) {
+        oldScript.remove();
+      }
 
-    })
+      const script = document.createElement("script");
+      script.id = "dashboardApiScript";
 
-    .withFailureHandler(function(error) {
+      const timeout = setTimeout(() => {
+        script.remove();
+        finishLoading();
 
-      dashboardLoading = false;
+        showMessage(
+          "The dashboard request timed out. Check your Apps Script deployment URL and permissions.",
+          true
+        );
+      }, 20000);
 
-      refreshBtn.disabled = false;
-      refreshBtn.textContent = '↻ Refresh Data';
+      window.handleDashboardData = function(data) {
+        clearTimeout(timeout);
+        finishLoading();
 
-      showDashboardError(
-        error.message || 'An error occurred while loading data.'
+        if (!data || data.success !== true) {
+          showMessage(
+            data && data.message
+              ? data.message
+              : "The server returned an invalid response.",
+            true
+          );
+          return;
+        }
+
+        renderDashboard(data);
+      };
+
+      script.onerror = function() {
+        clearTimeout(timeout);
+        finishLoading();
+
+        showMessage(
+          "Unable to connect to the dashboard API. Verify your Apps Script Web App URL and deployment settings.",
+          true
+        );
+      };
+
+      script.src =
+        API_URL +
+        "?callback=handleDashboardData&_=" +
+        Date.now();
+
+      document.body.appendChild(script);
+
+      function finishLoading() {
+        button.disabled = false;
+        button.textContent = "Refresh Data";
+      }
+    }
+
+    function renderDashboard(data) {
+      hideMessage();
+
+      document.getElementById("totalPatients").textContent =
+        number(data.totalPatients);
+
+      document.getElementById("totalVisits").textContent =
+        number(data.totalVisits);
+
+      document.getElementById("totalCharges").textContent =
+        money(data.totalCharges);
+
+      document.getElementById("newPatients").textContent =
+        number(data.newPatients);
+
+      document.getElementById("returningPatients").textContent =
+        number(data.returningPatients);
+
+      document.getElementById("updatedAt").textContent =
+        "Last updated: " + (data.updatedAt || "Unknown");
+
+      renderDepartments(data.departments || {});
+      renderServiceTypes(data.serviceTypes || []);
+    }
+
+    function renderDepartments(departments) {
+      const items = [
+        {
+          name: "Heart Station",
+          value: departments.heartStation || 0
+        },
+        {
+          name: "Laboratory",
+          value: departments.laboratory || 0
+        },
+        {
+          name: "Radiology",
+          value: departments.radiology || 0
+        },
+        {
+          name: "Pharmacy",
+          value: departments.pharmacy || 0
+        }
+      ];
+
+      const maximum = Math.max(
+        ...items.map(item => Number(item.value) || 0),
+        1
       );
 
-    })
+      const bars = document.getElementById("departmentBars");
+      const totals = document.getElementById("departmentTotals");
 
-    .getDashboardData();
+      bars.replaceChildren();
+      totals.replaceChildren();
 
-}
+      items.forEach(item => {
+        const percentage =
+          (Number(item.value) / maximum) * 100;
 
+        const row = document.createElement("div");
+        row.className = "bar-row";
 
-/**
- * Update statistic cards.
- */
-function updateStatistics(stats) {
+        const info = document.createElement("div");
+        info.className = "bar-info";
 
-  document.getElementById('totalPatients').textContent =
-    number(stats.totalPatients);
+        const name = document.createElement("span");
+        name.textContent = item.name;
 
-  document.getElementById('totalVisits').textContent =
-    number(stats.totalVisits);
+        const amount = document.createElement("strong");
+        amount.textContent = money(item.value);
 
-  document.getElementById('todayVisits').textContent =
-    number(stats.todayVisits);
+        info.append(name, amount);
 
-  document.getElementById('newPatients').textContent =
-    number(stats.newPatients);
+        const track = document.createElement("div");
+        track.className = "bar-track";
 
-  document.getElementById('returningPatients').textContent =
-    number(stats.returningPatients);
+        const fill = document.createElement("div");
+        fill.className = "bar-fill";
+        fill.style.width = percentage + "%";
 
-}
+        track.appendChild(fill);
+        row.append(info, track);
+        bars.appendChild(row);
 
+        const totalRow = document.createElement("div");
+        totalRow.className = "service-item";
 
-/**
- * Search and filter patient records.
- */
-function applyFilters() {
+        const totalName = document.createElement("span");
+        totalName.textContent = item.name;
 
-  const search = document
-    .getElementById('searchInput')
-    .value.toLowerCase()
-    .trim();
+        const totalAmount = document.createElement("strong");
+        totalAmount.textContent = money(item.value);
 
-  const status = document.getElementById('statusFilter').value;
+        totalRow.append(totalName, totalAmount);
+        totals.appendChild(totalRow);
+      });
+    }
 
-  const service = document.getElementById('serviceFilter').value;
+    function renderServiceTypes(serviceTypes) {
+      const container = document.getElementById("serviceTypes");
+      container.replaceChildren();
 
-  filteredPatients = allPatients.filter(patient => {
-
-    const matchesSearch =
-      String(patient.patientName || '').toLowerCase().includes(search) ||
-      String(patient.patientNo || '').toLowerCase().includes(search);
-
-    const matchesStatus =
-      status === 'All' || patient.status === status;
-
-    const matchesService =
-      service === 'All' ||
-      (service === 'Other'
-        ? patient.serviceType.toUpperCase() !== 'YAKAP'
-        : patient.serviceType.toUpperCase() === service);
-
-    return matchesSearch && matchesStatus && matchesService;
-
-  });
-
-  currentPage = 1;
-
-  renderPatients();
-
-}
-
-
-/**
- * Generate patient cards.
- */
-function renderPatients() {
-
-  const grid = document.getElementById('patientGrid');
-
-  const total = filteredPatients.length;
-
-  const totalPages = Math.max(
-    1,
-    Math.ceil(total / pageSize)
-  );
-
-  currentPage = Math.min(currentPage, totalPages);
-
-  const start = (currentPage - 1) * pageSize;
-
-  const pagePatients = filteredPatients.slice(
-    start,
-    start + pageSize
-  );
-
-  document.getElementById('recordCount').textContent =
-    number(total) + ' patient records found';
-
-  if (total === 0) {
-
-    grid.innerHTML = `
-      <div class="empty">
-        <div class="empty-icon">⌕</div>
-        <strong>No patients found</strong>
-        <p>Try changing your search or filters.</p>
-      </div>
-    `;
-
-  } else {
-
-    grid.innerHTML = pagePatients.map(patient => {
-
-      const statusClass =
-        patient.status === 'Returning' ? 'returning' : 'new';
-
-      return `
-
-        <article class="patient-card">
-
-          <div class="patient-top">
-
-            <div>
-              <div class="patient-name">
-                ${escapeHtml(patient.patientName || 'Unnamed Patient')}
-              </div>
-
-              <div class="patient-no">
-                Patient No. ${escapeHtml(patient.patientNo || 'N/A')}
-              </div>
-            </div>
-
-            <span class="status ${statusClass}">
-              ${escapeHtml(patient.status)}
-            </span>
-
-          </div>
-
-          <div class="patient-info">
-
-            <div>
-              <div class="info-label">AGE / GENDER</div>
-              <div class="info-value">
-                ${escapeHtml(patient.age || 'N/A')} /
-                ${escapeHtml(patient.gender || 'N/A')}
-              </div>
-            </div>
-
-            <div>
-              <div class="info-label">SERVICE TYPE</div>
-              <div class="info-value">
-                ${escapeHtml(patient.serviceType || 'N/A')}
-              </div>
-            </div>
-
-            <div>
-              <div class="info-label">TOTAL VISITS</div>
-              <div class="info-value">
-                ${number(patient.visitCount)}
-              </div>
-            </div>
-
-            <div>
-              <div class="info-label">LATEST VISIT</div>
-              <div class="info-value">
-                ${escapeHtml(patient.latestDate || 'N/A')}
-              </div>
-            </div>
-
-          </div>
-
-          <div class="patient-footer">
-
-            <div class="visit-info">
-              ${number(patient.visitCount)} recorded visit(s)
-            </div>
-
-            <div class="charge">
-              ${money(patient.totalCharges)}
-            </div>
-
-          </div>
-
-          <button
-            class="view-btn"
-            onclick="openPatientHistory(this.dataset.patientNo)" 
-            data-patient-no="${escapeHtml(patient.patientNo)}"
-            ${patient.patientNo ? '' : 'disabled'}
-          >
-            VIEW PATIENT DETAILS & HISTORY →
-          </button>
-
-        </article>
-
-      `;
-
-    }).join('');
-
-  }
-
-  document.getElementById('paginationInfo').textContent =
-    'Page ' + currentPage + ' of ' + totalPages;
-
-  document.getElementById('prevBtn').disabled =
-    currentPage <= 1;
-
-  document.getElementById('nextBtn').disabled =
-    currentPage >= totalPages;
-
-}
-
-
-/**
- * Pagination.
- */
-function changePage(direction) {
-
-  currentPage += direction;
-
-  renderPatients();
-
-  window.scrollTo({
-    top: document.querySelector('.section').offsetTop,
-    behavior: 'smooth'
-  });
-
-}
-
-
-/**
- * Open patient history modal.
- */
-function openPatientHistory(patientNo) {
-
-  const requestId = ++historyRequest;
-
-  const modal = document.getElementById('patientModal');
-  const body = document.getElementById('modalBody');
-
-  const patient = allPatients.find(
-    p => p.patientNo === patientNo
-  );
-
-  if (!patient) return;
-
-  document.getElementById('modalPatientName').textContent =
-    patient.patientName;
-
-  document.getElementById('modalPatientNumber').textContent =
-    'Patient No. ' + patient.patientNo;
-
-  body.innerHTML = `
-    <div class="loading">
-      Retrieving complete patient visit history...
-    </div>
-  `;
-
-  modal.classList.add('show');
-  document.body.style.overflow = 'hidden';
-
-  google.script.run
-
-    .withSuccessHandler(function(response) {
-
-      if (requestId !== historyRequest) return;
-
-      if (!response || !response.success) {
-        body.innerHTML = `
-          <div class="error">Unable to retrieve patient history.</div>
-        `;
+      if (!serviceTypes.length) {
+        const empty = document.createElement("p");
+        empty.textContent = "No service data available.";
+        container.appendChild(empty);
         return;
       }
 
-      renderPatientHistory(response);
-
-    })
-
-    .withFailureHandler(function(error) {
-
-      if (requestId !== historyRequest) return;
-
-      body.innerHTML = `
-        <div class="error">
-          ${escapeHtml(error.message || 'Unable to load patient history.')}
-        </div>
-      `;
-
-    })
-
-    .getPatientHistory(patientNo);
-
-}
-
-
-/**
- * Render full patient profile and visit history.
- */
-function renderPatientHistory(data) {
-
-  const profile = data.profile;
-  const totals = data.serviceTotals;
-  const visits = data.visits;
-
-  document.getElementById('modalPatientName').textContent =
-    profile.patientName;
-
-  document.getElementById('modalPatientNumber').textContent =
-    'Patient No. ' + profile.patientNo;
-
-  const profileHtml = `
-
-    <div class="profile-grid">
-
-      <div class="profile-box">
-        <div class="label">TOTAL VISITS</div>
-        <div class="value">${number(profile.visitCount)}</div>
-      </div>
-
-      <div class="profile-box">
-        <div class="label">TOTAL CHARGES</div>
-        <div class="value">${money(profile.totalCharges)}</div>
-      </div>
-
-      <div class="profile-box">
-        <div class="label">PATIENT STATUS</div>
-        <div class="value" style="font-size:14px">
-          ${escapeHtml(profile.status)}
-        </div>
-      </div>
-
-    </div>
-
-    <div class="profile-details">
-
-      <div>
-        <div class="info-label">AGE / GENDER</div>
-        <div class="info-value">
-          ${escapeHtml(profile.age || 'N/A')} /
-          ${escapeHtml(profile.gender || 'N/A')}
-        </div>
-      </div>
-
-      <div>
-        <div class="info-label">CIVIL STATUS</div>
-        <div class="info-value">
-          ${escapeHtml(profile.civilStatus || 'N/A')}
-        </div>
-      </div>
-
-      <div>
-        <div class="info-label">ADDRESS</div>
-        <div class="info-value">
-          ${escapeHtml(profile.address || 'Not provided')}
-        </div>
-      </div>
-
-      <div>
-        <div class="info-label">LATEST VISIT</div>
-        <div class="info-value">
-          ${escapeHtml(profile.latestVisit)}
-        </div>
-      </div>
-
-    </div>
-
-    <h3 class="modal-section-title">
-      Cumulative Services Availed
-    </h3>
-
-    <div class="service-summary">
-
-      <div class="service-box">
-        <div class="label">HEART STATION</div>
-        <div class="value">${money(totals.heartStation)}</div>
-      </div>
-
-      <div class="service-box">
-        <div class="label">LABORATORY</div>
-        <div class="value">${money(totals.lab)}</div>
-      </div>
-
-      <div class="service-box">
-        <div class="label">RADIOLOGY</div>
-        <div class="value">${money(totals.rad)}</div>
-      </div>
-
-      <div class="service-box">
-        <div class="label">PHARMACY</div>
-        <div class="value">${money(totals.pharma)}</div>
-      </div>
-
-    </div>
-
-    <h3 class="modal-section-title">
-      Complete Visit History (${visits.length})
-    </h3>
-
-    <div class="visit-list">
-
-      ${visits.map((visit, index) => renderVisit(visit, index, visits.length)).join('')}
-
-    </div>
-
-  `;
-
-  document.getElementById('modalBody').innerHTML = profileHtml;
-
-}
-
-
-/**
- * Render one visit transaction.
- *
- * Each visit retains its own department charges,
- * diagnosis, service type, date and visit number.
- */
-function renderVisit(visit, index, totalVisits) {
-
-  const visitNumber = visit.visitNumber ||
-    (totalVisits - index);
-
-  const originalStatus = visit.originalStatus || '';
-
-  const statusText = originalStatus || (
-    index === totalVisits - 1 ? 'First Recorded Visit' : 'Returning'
-  );
-
-  return `
-
-    <article class="visit-card">
-
-      <div class="visit-header">
-
-        <div>
-          <div class="visit-number">
-            Visit #${escapeHtml(visitNumber)}
-          </div>
-
-          <div class="visit-date">
-            ${escapeHtml(visit.dateTime || 'Date unavailable')}
-          </div>
-        </div>
-
-        <span class="status ${
-          index === 0 ? 'returning' : 'new'
-        }">
-          ${escapeHtml(statusText)}
-        </span>
-
-      </div>
-
-      <div class="visit-content">
-
-        <div class="visit-meta">
-
-          <div>
-            <div class="info-label">SERVICE TYPE</div>
-            <div class="info-value">
-              ${escapeHtml(visit.serviceType || 'N/A')}
-            </div>
-          </div>
-
-          <div>
-            <div class="info-label">PATIENT STATUS</div>
-            <div class="info-value">
-              ${escapeHtml(originalStatus || 'N/A')}
-            </div>
-          </div>
-
-        </div>
-
-        <div class="diagnosis">
-
-          <div class="diagnosis-label">
-            DIAGNOSIS
-          </div>
-
-          <div class="diagnosis-value">
-            ${escapeHtml(visit.diagnosis || 'No diagnosis recorded')}
-          </div>
-
-        </div>
-
-        <table class="service-table">
-
-          <tbody>
-
-            <tr>
-              <td>Heart Station</td>
-              <td>${money(visit.heartStation)}</td>
-            </tr>
-
-            <tr>
-              <td>Laboratory</td>
-              <td>${money(visit.lab)}</td>
-            </tr>
-
-            <tr>
-              <td>Radiology</td>
-              <td>${money(visit.rad)}</td>
-            </tr>
-
-            <tr>
-              <td>Pharmacy</td>
-              <td>${money(visit.pharma)}</td>
-            </tr>
-
-          </tbody>
-
-        </table>
-
-        <div class="visit-total">
-
-          <span>TOTAL CHARGES</span>
-
-          <span class="amount">
-            ${money(visit.totalCharges)}
-          </span>
-
-        </div>
-
-      </div>
-
-    </article>
-
-  `;
-
-}
-
-
-/**
- * Close modal.
- */
-function closeModal() {
-
-  historyRequest++;
-
-  document.getElementById('patientModal')
-    .classList.remove('show');
-
-  document.body.style.overflow = '';
-
-}
-
-
-/**
- * Close modal when clicking outside.
- */
-function handleModalBackdrop(event) {
-
-  if (event.target.id === 'patientModal') {
-    closeModal();
-  }
-
-}
-
-
-/**
- * Escape key closes modal.
- */
-document.addEventListener('keydown', function(event) {
-
-  if (event.key === 'Escape') {
-    closeModal();
-  }
-
-});
-
-
-/**
- * Show errors.
- */
-function showDashboardError(message) {
-
-  document.getElementById('errorContainer').innerHTML = `
-    <div class="error">
-      ${escapeHtml(message)}
-    </div>
-  `;
-
-  document.getElementById('patientGrid').innerHTML = '';
-
-}
-
-
-/**
- * Initial dashboard loading.
- */
-window.addEventListener('load', loadDashboard);
-
-</script>
+      serviceTypes.forEach(item => {
+        const row = document.createElement("div");
+        row.className = "service-item";
+
+        const name = document.createElement("span");
+        name.textContent = item.name;
+
+        const count = document.createElement("strong");
+        count.textContent = number(item.count) + " visits";
+
+        row.append(name, count);
+        container.appendChild(row);
+      });
+    }
+
+    // Initial load.
+    loadDashboard();
+  </script>
 
 </body>
 </html>
