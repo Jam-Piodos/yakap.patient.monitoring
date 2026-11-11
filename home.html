@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CUMC YAKAP | Dashboard</title>
+  <style>
+    :root{--navy:#102b50;--blue:#1c65a8;--bg:#f3f6fb;--muted:#718096;--line:#e5eaf1}
+    *{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:#17233b}
+    header{height:76px;background:var(--navy);color:#fff;display:flex;align-items:center;gap:16px;padding:0 5%;position:sticky;top:0;z-index:5}
+    .burger{width:42px;height:42px;border:1px solid #ffffff55;background:#ffffff12;color:#fff;border-radius:9px;font-size:23px;cursor:pointer;margin:0}
+    header h1{font-size:20px;margin:0}header p{font-size:12px;color:#c5d4e8;margin:4px 0 0}
+    main{max-width:1200px;margin:28px auto;padding:0 20px}.topline{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+    h2{font-size:22px;margin:0 0 5px}.muted{color:var(--muted);font-size:12px}
+    button,.btn{border:0;background:var(--blue);color:white;padding:10px 15px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600}
+    button:disabled{opacity:.6;cursor:wait}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:18px}
+    .card,.panel{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px;box-shadow:0 3px 12px #14284608}
+    .stat-label{font-size:13px;color:var(--muted);margin-bottom:10px}.stat-value{font-size:28px;font-weight:700;color:var(--navy)}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.panel h3{font-size:16px;margin:0 0 16px}
+    .mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.mini{background:#f5f8fc;border-radius:9px;padding:15px}.mini span{display:block;font-size:12px;color:var(--muted);margin-bottom:8px}.mini strong{font-size:23px;color:var(--navy)}
+    .notice{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px;color:#64748b;font-size:13px;margin-bottom:16px}
+    .drawer-backdrop,.modal-backdrop{display:none;position:fixed;inset:0;background:#0b1c31a6;z-index:10}.drawer{width:min(300px,85vw);height:100%;background:#fff;padding:20px;box-shadow:10px 0 30px #0002}
+    .drawer-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;color:var(--navy);font-weight:bold}.close{background:#edf2f7;color:#26364b;padding:7px 11px;margin:0}
+    .nav-item{display:flex;gap:12px;align-items:center;width:100%;background:transparent;color:#26364b;text-align:left;padding:13px 10px;margin:4px 0}.nav-item:hover{background:#f0f5fb}
+    .modal-backdrop{z-index:20;place-items:center;padding:18px}.modal{width:min(900px,100%);max-height:90vh;overflow:auto;background:#fff;border-radius:14px;padding:22px;box-shadow:0 20px 60px #0003}
+    .modal-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}.modal-head h3{margin:0;font-size:19px;color:var(--navy)}
+    .search{width:100%;padding:12px;border:1px solid #d7dfeb;border-radius:8px;font-size:14px;margin-bottom:14px}
+    table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:12px 10px;border-bottom:1px solid #edf1f6}th{color:var(--muted);font-weight:600;background:#f8fafc}
+    .link{border:0;background:transparent;color:var(--blue);padding:4px;text-decoration:underline}
+    .patient-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0}.summary-box{background:#f5f8fc;padding:14px;border-radius:9px}.summary-box small{display:block;color:var(--muted);margin-bottom:7px}.summary-box strong{font-size:21px;color:var(--navy)}
+    .visit{border:1px solid var(--line);border-radius:9px;padding:14px;margin:10px 0}.visit h4{margin:0 0 6px}.visit ul{margin:9px 0 0;padding-left:20px;font-size:13px}
+    .empty{padding:22px;text-align:center;color:var(--muted);font-size:13px}
+    @media(max-width:700px){.stats{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}.patient-summary{grid-template-columns:1fr 1fr}table{min-width:580px}.table-wrap{overflow:auto}}
+    @media(max-width:430px){.stats{grid-template-columns:1fr}.stat-value{font-size:24px}}
+  </style>
+</head>
+<body>
+<header>
+  <button class="burger" id="openMenu" aria-label="Open menu">☰</button>
+  <div><h1>CUMC YAKAP Dashboard</h1><p>Patient Services and Performance Overview</p></div>
+</header>
+
+<div class="drawer-backdrop" id="drawerBackdrop">
+  <nav class="drawer" aria-label="Main navigation">
+    <div class="drawer-head"><span>☰ MENU</span><button class="close" id="closeMenu">✕</button></div>
+    <button class="nav-item" data-view="dashboard">▦ Dashboard Overview</button>
+    <button class="nav-item" data-view="patients">♙ Patient Records</button>
+    <button class="nav-item" data-view="services">＋ Services Summary</button>
+    <button class="nav-item" id="logoutButton">↪ Sign out</button>
+  </nav>
+</div>
+
+<main>
+  <section id="dashboardView">
+    <div class="topline"><div><h2>Dashboard Overview</h2><p class="muted" id="updatedAt">Loading...</p></div><button id="refreshButton">Refresh Data</button></div>
+    <div class="notice" id="notice">Connecting to the dashboard backend...</div>
+    <section class="stats">
+      <div class="card"><div class="stat-label">Total Patients</div><div class="stat-value" id="totalPatients">—</div></div>
+      <div class="card"><div class="stat-label">Total Visits</div><div class="stat-value" id="totalVisits">—</div></div>
+      <div class="card"><div class="stat-label">Total Charges</div><div class="stat-value" id="totalCharges">—</div></div>
+    </section>
+    <section class="grid">
+      <div class="panel"><h3>Patient Classification</h3><div class="mini-grid"><div class="mini"><span>New Patients</span><strong id="newPatients">—</strong></div><div class="mini"><span>Returning Patients</span><strong id="returningPatients">—</strong></div></div></div>
+      <div class="panel"><h3>Department Charges</h3><div id="departmentTotals" class="muted">No data yet.</div></div>
+      <div class="panel"><h3>Service Type Summary</h3><div id="serviceTypes" class="muted">No data yet.</div></div>
+    </section>
+  </section>
+
+  <section id="patientsView" hidden>
+    <div class="topline"><div><h2>Patient Records</h2><p class="muted">Search for a patient to review their visit history.</p></div><button id="refreshPatients">Refresh Patients</button></div>
+    <div class="panel"><input class="search" id="patientSearch" placeholder="Search by patient number or patient name..."><div class="table-wrap"><table><thead><tr><th>Patient No.</th><th>Patient Name</th><th>Total Visits</th><th>Services Availed</th><th>Details</th></tr></thead><tbody id="patientRows"><tr><td colspan="5" class="empty">Patient records require an authenticated backend endpoint.</td></tr></tbody></table></div></div>
+  </section>
+
+  <section id="servicesView" hidden>
+    <div class="topline"><div><h2>Services Summary</h2><p class="muted">Aggregate service counts from recorded transactions.</p></div></div>
+    <div class="panel" id="serviceSummary">Loading service summary...</div>
+  </section>
+</main>
+
+<div class="modal-backdrop" id="patientModal">
+  <section class="modal" role="dialog" aria-modal="true" aria-labelledby="patientModalTitle">
+    <div class="modal-head"><h3 id="patientModalTitle">Patient Profile</h3><button class="close" data-close="patientModal">✕</button></div>
+    <div id="patientProfile"></div>
+  </section>
+</div>
+
+<script>
+  const API_URL = "https://script.google.com/macros/s/AKfycbwytHFTKw-o_R7oPlk-iDh1PtyiEzEtSRW5mLYqUgh7LRIeo2fbG0EeavPzWCD-b1LPQA/exec";
+  const token = sessionStorage.getItem("cumcSessionToken");
+  if (!token) window.location.replace("index.html");
+
+  const $ = id => document.getElementById(id);
+  const peso = new Intl.NumberFormat("en-PH",{style:"currency",currency:"PHP",maximumFractionDigits:2});
+  const fmt = n => new Intl.NumberFormat("en-PH").format(Number(n)||0);
+  const esc = s => String(s ?? "").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  let patients = [];
+
+  function showNotice(text,isError=false){$("notice").textContent=text;$("notice").style.color=isError?"#a52a20":"#64748b";}
+  function showView(name){
+    ["dashboard","patients","services"].forEach(v=>$(v+"View").hidden=v!==name);
+    $("drawerBackdrop").style.display="none";
+    if(name==="patients") loadPatients();
+  }
+  $("openMenu").onclick=()=>$("drawerBackdrop").style.display="block";
+  $("closeMenu").onclick=()=>$("drawerBackdrop").style.display="none";
+  $("drawerBackdrop").addEventListener("click",e=>{if(e.target===$("drawerBackdrop"))$("drawerBackdrop").style.display="none";});
+  document.querySelectorAll("[data-view]").forEach(b=>b.onclick=()=>showView(b.dataset.view));
+  $("logoutButton").onclick=()=>{sessionStorage.removeItem("cumcSessionToken");sessionStorage.removeItem("cumcSessionExpiry");window.location.replace("index.html");};
+  document.querySelectorAll("[data-close]").forEach(b=>b.onclick=()=>$(b.dataset.close).style.display="none");
+  $("patientModal").onclick=e=>{if(e.target===$("patientModal"))$("patientModal").style.display="none";};
+
+  async function apiPost(action,extra={}){
+    const body=new URLSearchParams({action,token,...extra});
+    const response=await fetch(API_URL,{method:"POST",body,redirect:"follow"});
+    if(!response.ok) throw new Error("Backend request failed ("+response.status+").");
+    const data=await response.json();
+    if(!data.success) throw new Error(data.message||"Request was not successful.");
+    return data;
+  }
+
+  async function loadDashboard(){
+    $("refreshButton").disabled=true;showNotice("Loading dashboard statistics...");
+    try{
+      // Existing aggregate-only JSONP endpoint. No individual patient details here.
+      const data=await new Promise((resolve,reject)=>{
+        const callback="dashboardCb_"+Date.now();
+        const script=document.createElement("script");
+        const timer=setTimeout(()=>{cleanup();reject(new Error("Dashboard request timed out."));},18000);
+        function cleanup(){clearTimeout(timer);delete window[callback];script.remove();}
+        window[callback]=result=>{cleanup();resolve(result);};
+        script.onerror=()=>{cleanup();reject(new Error("Could not connect to Apps Script."));};
+        script.src=API_URL+"?callback="+callback+"&_="+Date.now();
+        document.body.appendChild(script);
+      });
+      if(!data.success) throw new Error(data.message||"Unable to load dashboard.");
+      $("totalPatients").textContent=fmt(data.totalPatients);$("totalVisits").textContent=fmt(data.totalVisits);
+      $("totalCharges").textContent=peso.format(Number(data.totalCharges)||0);
+      $("newPatients").textContent=fmt(data.newPatients);$("returningPatients").textContent=fmt(data.returningPatients);
+      $("updatedAt").textContent="Last updated: "+(data.updatedAt||"Unknown");
+      const deps=data.departments||{};
+      $("departmentTotals").innerHTML=Object.entries({ "Heart Station":deps.heartStation,"Laboratory":deps.laboratory,"Radiology":deps.radiology,"Pharmacy":deps.pharmacy }).map(([k,v])=>`<p style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #edf1f6"><span>${esc(k)}</span><strong>${peso.format(Number(v)||0)}</strong></p>`).join("");
+      $("serviceTypes").innerHTML=(data.serviceTypes||[]).map(x=>`<p style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #edf1f6"><span>${esc(x.name)}</span><strong>${fmt(x.count)} visits</strong></p>`).join("")||"No service data.";
+      $("serviceSummary").innerHTML=$("serviceTypes").innerHTML;
+      showNotice("Dashboard data loaded.");
+    }catch(e){showNotice(e.message,true);}
+    finally{$("refreshButton").disabled=false;}
+  }
+
+  async function loadPatients(){
+    $("patientRows").innerHTML='<tr><td colspan="5" class="empty">Loading patient records...</td></tr>';
+    try{
+      // Requires secure doPost(action=patients) returning patient rows for this valid session.
+      const data=await apiPost("patients");
+      patients=data.patients||[];
+      renderPatients();
+    }catch(e){
+      $("patientRows").innerHTML=`<tr><td colspan="5" class="empty">${esc(e.message)}<br><br>Patient-level records are disabled until the matching authenticated Apps Script backend is deployed.</td></tr>`;
+    }
+  }
+  function renderPatients(){
+    const q=$("patientSearch").value.trim().toLowerCase();
+    const list=patients.filter(p=>String(p.patientNo||"").toLowerCase().includes(q)||String(p.patientName||"").toLowerCase().includes(q));
+    $("patientRows").innerHTML=list.length?list.map((p,i)=>`<tr><td>${esc(p.patientNo)}</td><td>${esc(p.patientName)}</td><td>${fmt(p.totalVisits)}</td><td>${fmt(p.totalServices)}</td><td><button class="link" data-patient-index="${i}">View history</button></td></tr>`).join(""):'<tr><td colspan="5" class="empty">No matching patients found.</td></tr>';
+    $("patientRows").querySelectorAll("[data-patient-index]").forEach(b=>b.onclick=()=>openPatient(list[Number(b.dataset.patientIndex)]));
+  }
+  $("patientSearch").addEventListener("input",renderPatients);
+  $("refreshPatients").onclick=loadPatients;
+
+  async function openPatient(p){
+    $("patientProfile").innerHTML='<p class="muted">Loading patient history...</p>';
+    $("patientModal").style.display="grid";
+    try{
+      // Requires secure doPost(action=patientHistory, patientNo=...) with server-side authorization.
+      const data=await apiPost("patientHistory",{patientNo:p.patientNo});
+      const patient=data.patient||p;
+      const services=patient.services||[];
+      const visits=patient.visits||[];
+      $("patientModalTitle").textContent=patient.patientName||"Patient Profile";
+      $("patientProfile").innerHTML=`
+        <p><strong>${esc(patient.patientName)}</strong><br><span class="muted">Patient No.: ${esc(patient.patientNo)}</span></p>
+        <div class="patient-summary">
+          <div class="summary-box"><small>Total Visits</small><strong>${fmt(patient.totalVisits)}</strong></div>
+          <div class="summary-box"><small>Total Services</small><strong>${fmt(patient.totalServices)}</strong></div>
+          <div class="summary-box"><small>Total Charges</small><strong>${peso.format(Number(patient.totalCharges)||0)}</strong></div>
+        </div>
+        <h4>Services Availed</h4>
+        ${services.length?services.map(s=>`<p style="padding:8px 0;border-bottom:1px solid #edf1f6">${esc(s.name)} <strong style="float:right">${fmt(s.count)} times</strong></p>`).join(""):'<p class="muted">No service summary available.</p>'}
+        <h4 style="margin-top:20px">Visit History</h4>
+        ${visits.length?visits.map((v,i)=>`<article class="visit"><h4>Visit #${fmt(v.visitNumber||i+1)}</h4><span class="muted">${esc(v.date||"Date not recorded")}</span><ul>${(v.services||[]).map(s=>`<li>${esc(s)}</li>`).join("")||"<li>No service details recorded</li>"}</ul></article>`).join(""):'<p class="muted">No visit history available.</p>'}`;
+    }catch(e){$("patientProfile").innerHTML=`<p class="empty">${esc(e.message)}</p>`;}
+  }
+
+  $("refreshButton").onclick=loadDashboard;
+  loadDashboard();
+</script>
+</body>
+</html>
