@@ -1266,7 +1266,8 @@ function renderPatients() {
 
           <button
             class="view-btn"
-            onclick="openPatientHistory('${escapeHtml(patient.patientNo)}')"
+            onclick="openPatientHistory(this.dataset.patientNo)" 
+            data-patient-no="${escapeHtml(patient.patientNo)}"
             ${patient.patientNo ? '' : 'disabled'}
           >
             VIEW PATIENT DETAILS & HISTORY →
